@@ -1,7 +1,8 @@
-package client
+package work
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -10,11 +11,6 @@ import (
 )
 
 func Run(ctx context.Context) error {
-
-	return nil
-}
-
-func newManager(ctx context.Context) error {
 	organizationUrl := os.Getenv("ADO_ORG")
 	pat := os.Getenv("ADO_PAT")
 	if organizationUrl == "" || pat == "" {
@@ -32,7 +28,12 @@ func newManager(ctx context.Context) error {
 
 	workItem := workitemtracking.CreateWorkItemArgs{}
 
-	wicli.CreateWorkItem(ctx, workItem)
+	wi, err := wicli.CreateWorkItem(ctx, workItem)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Work Item URL:", wi.Url)
 
 	return nil
 }
